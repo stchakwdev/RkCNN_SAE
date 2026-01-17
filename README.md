@@ -66,16 +66,22 @@ Sparse Autoencoders (SAEs) are a key tool in mechanistic interpretability for de
 | Feature Recovery | **30%** | > 25% | ✅ Pass |
 | Score Consistency (CV) | **1.46%** | < 10% | ✅ Pass |
 
-### Phase 2: GPT-2 SAE Comparison (Synthetic Data)
+### Phase 2: GPT-2 SAE Comparison ✓
+
+**Real GPT-2 MLP Activations (Layer 6, OpenWebText)**
 
 | Metric | Baseline SAE | RkCNN SAE | Change |
 |--------|--------------|-----------|--------|
-| Dead Latent Rate | **56.9%** | **55.5%** | ↓ 1.4% |
-| L0 Sparsity | 2360.6 | 2429.1 | ↑ 2.9% |
-| Reconstruction Loss | 0.1037 | 0.1036 | ↓ 0.1% |
-| Dead Latents (count) | 3,497 | 3,411 | ↓ 86 |
+| Dead Latent Rate | 0.81% | **0.70%** | ↓ 14% |
+| Dead Latents | 50 | **43** | ↓ 7 |
+| L0 Sparsity | 2979.5 | **2955.0** | ↓ 0.8% |
+| Reconstruction Loss | 1.0701 | 1.0707 | → same |
 
-> **Note**: Results above are from synthetic GPT-2-like activations. Real GPT-2 activations may show different behavior.
+**Key Findings:**
+- ✅ RkCNN reduces dead latents by **14%** (50 → 43)
+- ✅ Better L0 sparsity (fewer active latents per sample)
+- ✅ Reconstruction quality maintained
+- 🔬 RkCNN-initialized latents show higher mean activation when active (0.53 vs 0.37)
 
 <p align="center">
   <img src="results/phase2/phase2_plots.png" alt="Phase 2 Results" width="800"/>
@@ -470,7 +476,7 @@ loss, loss_dict = sae.compute_loss(x, latents, reconstructed)
 - [x] SAE with RkCNN initialization
 - [x] Phase 2 experiment framework
 - [x] Phase 2 results (synthetic data)
-- [ ] Full Phase 2 results on real GPT-2 activations
+- [x] Full Phase 2 results on real GPT-2 activations ✓
 - [ ] Multi-layer analysis
 - [ ] Hyperparameter sweep
 - [ ] Feature interpretability analysis

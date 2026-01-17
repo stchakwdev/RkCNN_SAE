@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-01-17T05:57:21.010706",
+  "config": {
+    "model_name": "gpt2",
+    "layer": 6,
+    "hook_point": "mlp_out",
+    "d_model": 768,
+    "n_latents": 6144,
+    "expansion_factor": 8,
+    "l1_coefficient": 0.001,
+    "n_train_steps": 10000,
+    "batch_size": 256,
+    "lr": 0.001,
+    "rkcnn_fraction": 0.5,
+    "rkcnn_n_subsets": 600,
+    "rkcnn_score_method": "kurtosis",
+    "seed": 42,
+    "use_synthetic": false,
+    "dry_run": false
+  },
+  "baseline": {
+    "dead_latent_rate": 0.008138020833333334,
+    "l0_sparsity": 2979.53271484375,
+    "reconstruction_loss": 1.0701348781585693,
+    "explained_variance": -0.8977979421615601,
+    "n_dead_latents": 50
+  },
+  "rkcnn": {
+    "dead_latent_rate": 0.006998697916666667,
+    "l0_sparsity": 2954.988037109375,
+    "reconstruction_loss": 1.07070791721344,
+    "explained_variance": -0.8988137245178223,
+    "n_dead_latents": 43,
+    "n_rkcnn_initialized": 600,
+    "latent_stats": {
+      "rkcnn_n": 600,
+      "rkcnn_dead_rate": 0.008333333767950535,
+      "rkcnn_activity_rate": 0.20098009705543518,
+      "rkcnn_mean_when_active": 0.5270044803619385,
+      "random_n": 5544,
+      "random_dead_rate": 0.006854257080703974,
+      "random_activity_rate": 0.5112554430961609,
+      "random_mean_when_active": 0.367808997631073
+    }
+  },
+  "success_criteria": {
+    "dead_latent_improved_or_excellent": true,
+    "dead_latent_target": true,
+    "l0_not_worse": true,
+    "recon_not_worse": true
+  },
+  "overall_pass": true
+}
