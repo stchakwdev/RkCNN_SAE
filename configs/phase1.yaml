@@ -1,0 +1,25 @@
+# Phase 1: Toy Model Configuration
+# This configuration tests RkCNN on a toy model of superposition
+
+# Toy model parameters
+n_features: 10          # Number of ground truth features
+d_hidden: 5             # Hidden dimension (creates superposition when < n_features)
+feature_probability: 0.1  # Sparsity: probability a feature is active
+
+# Data generation
+n_samples: 5000         # Number of samples to generate
+
+# RkCNN probing parameters
+m: 2                    # Subset size (dimensions per subset)
+h: 100                  # Total number of random subsets to sample
+r: 10                   # Number of top subsets to keep
+score_method: "knn"     # Scoring method: "knn", "kurtosis", "variance_ratio"
+k_neighbors: 5          # Number of neighbors for KNN scoring
+
+# Execution
+seed: 42
+device: "cpu"           # CPU is sufficient for Phase 1
+verbose: true
+
+# Output
+output_dir: "./results/phase1"

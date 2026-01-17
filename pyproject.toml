@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rkcnn_sae"
+version = "0.1.0"
+description = "Random k Conditional Nearest Neighbor methods for Sparse Autoencoders"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Samuel Tchakwera"}
+]
+keywords = ["mechanistic-interpretability", "sparse-autoencoder", "rkcnn", "transformer"]
+
+dependencies = [
+    "torch>=2.0.0",
+    "transformer-lens>=1.0.0",
+    "scikit-learn>=1.2.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "matplotlib>=3.7.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.65.0",
+    "einops>=0.6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rkcnn_sae*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true

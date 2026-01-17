@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-01-16T23:53:32.709877",
+  "config": {
+    "n_features": 10,
+    "d_hidden": 5,
+    "n_samples": 5000,
+    "m": 2,
+    "h": 100,
+    "r": 10,
+    "score_method": "knn",
+    "feature_probability": 0.1,
+    "seed": 42
+  },
+  "superposition": {
+    "capacity_ratio": 2.0,
+    "mean_overlap": 0.41248923540115356,
+    "max_overlap": 0.9344473481178284
+  },
+  "scores": {
+    "all_mean": 0.824171245098114,
+    "all_std": 0.012052521109580994,
+    "all_min": 0.7991999983787537,
+    "all_max": 0.8503199815750122,
+    "top_r_mean": 0.8466079831123352,
+    "top_1": 0.8503199815750122,
+    "top_scores": [
+      0.8503199815750122,
+      0.8503199815750122,
+      0.8503199815750122,
+      0.8503199815750122,
+      0.8503199815750122,
+      0.8503199815750122,
+      0.8503199815750122,
+      0.8503199815750122,
+      0.8317599892616272,
+      0.8317599892616272
+    ]
+  },
+  "feature_recovery": {
+    "recovery_rate": 0.3,
+    "threshold": 0.7
+  },
+  "success_criteria": {
+    "criterion1_pass": true,
+    "criterion2_pass": true,
+    "criterion3_pass": true,
+    "score_cv": 0.014623806811869144,
+    "overall_pass": true
+  }
+}
