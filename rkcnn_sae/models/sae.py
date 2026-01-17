@@ -135,7 +135,8 @@ class SparseAutoencoder(nn.Module):
             Reconstructed input.
         """
         if self.config.tied_weights:
-            return F.linear(latents, self.encoder.weight)
+            # Encoder weight is (n_latents, d_model), need transpose for decode
+            return F.linear(latents, self.encoder.weight.T)
         else:
             return self.decoder(latents)
 
