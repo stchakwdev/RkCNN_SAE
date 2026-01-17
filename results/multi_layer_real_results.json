@@ -1,0 +1,336 @@
+{
+  "timestamp": "2026-01-17T17:52:50.467729",
+  "config": {
+    "model_name": "gpt2",
+    "layers": "all",
+    "hook_point": "mlp_out",
+    "max_tokens": 100000,
+    "use_synthetic": false,
+    "expansion_factor": 8,
+    "l1_coefficient": 0.001,
+    "n_train_steps": 5000,
+    "batch_size": 256,
+    "lr": 0.001,
+    "rkcnn_fraction": 0.5,
+    "rkcnn_n_subsets": 600,
+    "rkcnn_score_method": "kurtosis",
+    "seed": 42,
+    "device": "cuda",
+    "output_dir": "/workspace/results/multi_layer_real",
+    "verbose": true
+  },
+  "layers": [
+    {
+      "layer": 0,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.922607421875,
+        "n_dead_latents": 22674,
+        "l0_sparsity": 435.83343505859375,
+        "reconstruction_loss": 0.007261059246957302,
+        "explained_variance": 0.821410596370697
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.9042154947916666,
+        "n_dead_latents": 22222,
+        "l0_sparsity": 665.299560546875,
+        "reconstruction_loss": 0.00535360723733902,
+        "explained_variance": 0.8683274984359741,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": 1.9934727000088206,
+        "dead_latent_rate_diff": 0.01839192708333337,
+        "l0_diff": -229.46612548828125,
+        "recon_diff": 0.0019074520096182823
+      }
+    },
+    {
+      "layer": 1,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.9073893229166666,
+        "n_dead_latents": 22300,
+        "l0_sparsity": 998.96337890625,
+        "reconstruction_loss": 0.0025133932940661907,
+        "explained_variance": 0.9011249542236328
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.9337565104166666,
+        "n_dead_latents": 22948,
+        "l0_sparsity": 893.5802612304688,
+        "reconstruction_loss": 0.0028612317983061075,
+        "explained_variance": 0.8874358534812927,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": -2.905829596412556,
+        "dead_latent_rate_diff": -0.0263671875,
+        "l0_diff": 105.38311767578125,
+        "recon_diff": -0.0003478385042399168
+      }
+    },
+    {
+      "layer": 2,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.9042154947916666,
+        "n_dead_latents": 22222,
+        "l0_sparsity": 1082.9342041015625,
+        "reconstruction_loss": 0.003177591133862734,
+        "explained_variance": 0.9257072806358337
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.928955078125,
+        "n_dead_latents": 22830,
+        "l0_sparsity": 1001.182373046875,
+        "reconstruction_loss": 0.003470304887741804,
+        "explained_variance": 0.9188604950904846,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": -2.736027360273603,
+        "dead_latent_rate_diff": -0.02473958333333337,
+        "l0_diff": 81.7518310546875,
+        "recon_diff": -0.0002927137538790703
+      }
+    },
+    {
+      "layer": 3,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.9646809895833334,
+        "n_dead_latents": 23708,
+        "l0_sparsity": 333.7439270019531,
+        "reconstruction_loss": 0.007978316396474838,
+        "explained_variance": 0.6526901721954346
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.9467366536458334,
+        "n_dead_latents": 23267,
+        "l0_sparsity": 336.8958740234375,
+        "reconstruction_loss": 0.007974316366016865,
+        "explained_variance": 0.6529971957206726,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": 1.860131601147292,
+        "dead_latent_rate_diff": 0.0179443359375,
+        "l0_diff": -3.151947021484375,
+        "recon_diff": 4.00003045797348e-06
+      }
+    },
+    {
+      "layer": 4,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.9613444010416666,
+        "n_dead_latents": 23626,
+        "l0_sparsity": 271.22747802734375,
+        "reconstruction_loss": 0.009044629521667957,
+        "explained_variance": 0.6368851661682129
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.9406331380208334,
+        "n_dead_latents": 23117,
+        "l0_sparsity": 419.4384460449219,
+        "reconstruction_loss": 0.00750366598367691,
+        "explained_variance": 0.698738694190979,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": 2.1544061627021076,
+        "dead_latent_rate_diff": 0.02071126302083326,
+        "l0_diff": -148.21096801757812,
+        "recon_diff": 0.001540963537991047
+      }
+    },
+    {
+      "layer": 5,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.8170166015625,
+        "n_dead_latents": 20079,
+        "l0_sparsity": 450.50665283203125,
+        "reconstruction_loss": 0.008293853141367435,
+        "explained_variance": 0.7071942090988159
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.859619140625,
+        "n_dead_latents": 21126,
+        "l0_sparsity": 483.80194091796875,
+        "reconstruction_loss": 0.00813494622707367,
+        "explained_variance": 0.7129274606704712,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": -5.214403107724489,
+        "dead_latent_rate_diff": -0.0426025390625,
+        "l0_diff": -33.2952880859375,
+        "recon_diff": 0.00015890691429376602
+      }
+    },
+    {
+      "layer": 6,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.8930257161458334,
+        "n_dead_latents": 21947,
+        "l0_sparsity": 1219.372314453125,
+        "reconstruction_loss": 0.004648210015147924,
+        "explained_variance": 0.8515251874923706
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.83984375,
+        "n_dead_latents": 20640,
+        "l0_sparsity": 1348.56201171875,
+        "reconstruction_loss": 0.004163365811109543,
+        "explained_variance": 0.8670147657394409,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": 5.9552558436232745,
+        "dead_latent_rate_diff": 0.05318196614583337,
+        "l0_diff": -129.189697265625,
+        "recon_diff": 0.0004848442040383816
+      }
+    },
+    {
+      "layer": 7,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.852294921875,
+        "n_dead_latents": 20946,
+        "l0_sparsity": 710.8550415039062,
+        "reconstruction_loss": 0.008512097410857677,
+        "explained_variance": 0.7561001777648926
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.8505452473958334,
+        "n_dead_latents": 20903,
+        "l0_sparsity": 705.673095703125,
+        "reconstruction_loss": 0.008557804860174656,
+        "explained_variance": 0.7547798156738281,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": 0.20528979280053472,
+        "dead_latent_rate_diff": 0.0017496744791666297,
+        "l0_diff": 5.18194580078125,
+        "recon_diff": -4.5707449316978455e-05
+      }
+    },
+    {
+      "layer": 8,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.845703125,
+        "n_dead_latents": 20784,
+        "l0_sparsity": 583.3380737304688,
+        "reconstruction_loss": 0.009975660592317581,
+        "explained_variance": 0.734775185585022
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.8617350260416666,
+        "n_dead_latents": 21178,
+        "l0_sparsity": 263.6921081542969,
+        "reconstruction_loss": 0.014034842140972614,
+        "explained_variance": 0.6269311904907227,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": -1.8956889915319477,
+        "dead_latent_rate_diff": -0.01603190104166663,
+        "l0_diff": 319.6459655761719,
+        "recon_diff": -0.004059181548655033
+      }
+    },
+    {
+      "layer": 9,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.7098795572916666,
+        "n_dead_latents": 17446,
+        "l0_sparsity": 1111.0794677734375,
+        "reconstruction_loss": 0.006881889887154102,
+        "explained_variance": 0.8331020474433899
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.724853515625,
+        "n_dead_latents": 17814,
+        "l0_sparsity": 807.7822265625,
+        "reconstruction_loss": 0.008856523782014847,
+        "explained_variance": 0.7852151989936829,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": -2.1093660437922734,
+        "dead_latent_rate_diff": -0.01497395833333337,
+        "l0_diff": 303.2972412109375,
+        "recon_diff": -0.0019746338948607445
+      }
+    },
+    {
+      "layer": 10,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.6034342447916666,
+        "n_dead_latents": 14830,
+        "l0_sparsity": 1017.5366821289062,
+        "reconstruction_loss": 0.008668663911521435,
+        "explained_variance": 0.8474790453910828
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.6936848958333334,
+        "n_dead_latents": 17048,
+        "l0_sparsity": 319.6893005371094,
+        "reconstruction_loss": 0.016097242012619972,
+        "explained_variance": 0.7167854309082031,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": -14.95616992582603,
+        "dead_latent_rate_diff": -0.09025065104166674,
+        "l0_diff": 697.8473815917969,
+        "recon_diff": -0.0074285781010985374
+      }
+    },
+    {
+      "layer": 11,
+      "d_model": 3072,
+      "n_latents": 24576,
+      "baseline": {
+        "dead_latent_rate": 0.7080485026041666,
+        "n_dead_latents": 17401,
+        "l0_sparsity": 181.93467712402344,
+        "reconstruction_loss": 0.03640139102935791,
+        "explained_variance": 0.5224323272705078
+      },
+      "rkcnn": {
+        "dead_latent_rate": 0.6962890625,
+        "n_dead_latents": 17112,
+        "l0_sparsity": 389.2265625,
+        "reconstruction_loss": 0.01733996719121933,
+        "explained_variance": 0.772484540939331,
+        "n_rkcnn_initialized": 600
+      },
+      "improvement": {
+        "dead_latent_reduction": 1.6608240905695075,
+        "dead_latent_rate_diff": 0.01175944010416663,
+        "l0_diff": -207.29188537597656,
+        "recon_diff": 0.01906142383813858
+      }
+    }
+  ]
+}

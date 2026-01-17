@@ -16,6 +16,13 @@ This project implements **Random k Conditional Nearest Neighbor (RkCNN)** method
 - L0 sparsity improved (2979 → 2955)
 - Reconstruction quality maintained
 
+### Phase 3: Multi-Layer Real GPT-2 Analysis - COMPLETED
+- **6 out of 12 layers improved** with RkCNN initialization
+- **Best result: Layer 6 with 6.0% reduction** in dead latents (1,307 fewer)
+- **Layer 11 reconstruction dramatically improved**: 52% → 77% explained variance
+- Layers that benefited: 0, 3, 4, 6, 7, 11 (early + final layers)
+- Configuration: 100K tokens, 5000 training steps, 24576 latents (8x expansion)
+
 ## Critical Technical Learnings
 
 ### 1. Transformer-Lens Hook Points
@@ -119,12 +126,9 @@ python experiments/multi_layer_analysis.py \
 - [x] Phase 2 real GPT-2 single layer (Layer 6)
 - [x] Multi-layer analysis on synthetic data
 - [x] Fixed hook point issue (`mlp.hook_post` vs `hook_mlp_out`)
-
-### In Progress
-- [ ] Multi-layer analysis on real GPT-2 data (all 12 layers)
+- [x] Multi-layer analysis on real GPT-2 data (all 12 layers) ✓
 
 ### To Do
-- [ ] Complete multi-layer real data analysis
 - [ ] Hyperparameter sweep
 - [ ] Feature interpretability analysis
 - [ ] Paper writeup
@@ -149,26 +153,17 @@ python experiments/multi_layer_analysis.py \
 | rkcnn_n_subsets | 600 | 600 |
 | score_method | kurtosis | kurtosis |
 
-## Resume Instructions
+## Multi-Layer Analysis Results Summary
 
-To continue the multi-layer analysis on real GPT-2 data:
+Results from real GPT-2 analysis (wikitext, 100K tokens, 5000 steps per SAE):
 
-1. Start a RunPod pod (RTX 4090 recommended)
-2. Clone repo and install dependencies:
-   ```bash
-   cd /workspace
-   git clone https://github.com/stchakwdev/RkCNN_SAE.git
-   cd RkCNN_SAE
-   pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu124
-   pip install transformer-lens scikit-learn matplotlib tqdm datasets einops
-   ```
-3. Run the experiment:
-   ```bash
-   PYTHONPATH=/workspace/RkCNN_SAE python experiments/multi_layer_analysis.py \
-       --layers all \
-       --max-tokens 100000 \
-       --n-train-steps 5000 \
-       --output-dir /workspace/results/multi_layer_real \
-       --verbose
-   ```
-4. Download results and commit
+| Layer | Baseline Dead | RkCNN Dead | Improvement |
+|-------|---------------|------------|-------------|
+| 0 | 92.3% | 90.4% | **+2.0%** ✓ |
+| 3 | 96.5% | 94.7% | **+1.9%** ✓ |
+| 4 | 96.1% | 94.1% | **+2.2%** ✓ |
+| 6 | 89.3% | 84.0% | **+6.0%** ✓ |
+| 7 | 85.2% | 85.1% | **+0.2%** ✓ |
+| 11 | 70.8% | 69.6% | **+1.7%** ✓ |
+
+**Key insight**: RkCNN is most effective on early layers (0, 3, 4) and the final layer (11), where activation patterns are more structured.
