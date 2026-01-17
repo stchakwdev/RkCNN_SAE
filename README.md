@@ -539,11 +539,12 @@ loss, loss_dict = sae.compute_loss(x, latents, reconstructed)
 If you use this code in your research, please cite:
 
 ```bibtex
-@software{rkcnn_sae2024,
-  author = {Tchakwera, Samuel},
-  title = {RkCNN-SAE: Random k Conditional Nearest Neighbor Methods for Sparse Autoencoders},
-  year = {2024},
-  url = {https://github.com/YOUR_USERNAME/RKCNN_SAE}
+@misc{rkcnn_sae_2026,
+  title={RkCNN-SAE: Random k Conditional Nearest Neighbor Methods for Sparse Autoencoders},
+  author={Samuel T. Chakwera},
+  year={2026},
+  url={https://github.com/stchakwdev/RkCNN_SAE},
+  note={Reducing dead latents in SAEs through data-driven direction mining for mechanistic interpretability}
 }
 ```
 
