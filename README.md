@@ -66,16 +66,16 @@ Sparse Autoencoders (SAEs) are a key tool in mechanistic interpretability for de
 | Feature Recovery | **30%** | > 25% | ✅ Pass |
 | Score Consistency (CV) | **1.46%** | < 10% | ✅ Pass |
 
-### Phase 2: GPT-2 SAE Comparison
+### Phase 2: GPT-2 SAE Comparison (Synthetic Data)
 
-<!-- UPDATE THESE VALUES AFTER RUNNING FULL PHASE 2 -->
+| Metric | Baseline SAE | RkCNN SAE | Change |
+|--------|--------------|-----------|--------|
+| Dead Latent Rate | **56.9%** | **55.5%** | ↓ 1.4% |
+| L0 Sparsity | 2360.6 | 2429.1 | ↑ 2.9% |
+| Reconstruction Loss | 0.1037 | 0.1036 | ↓ 0.1% |
+| Dead Latents (count) | 3,497 | 3,411 | ↓ 86 |
 
-| Metric | Baseline SAE | RkCNN SAE | Improvement |
-|--------|--------------|-----------|-------------|
-| Dead Latent Rate | `XX.X%` | `XX.X%` | `↓ XX.X%` |
-| L0 Sparsity | `XXX.X` | `XXX.X` | `→ X.X%` |
-| Reconstruction Loss | `X.XXXX` | `X.XXXX` | `→ X.X%` |
-| Explained Variance | `XX.X%` | `XX.X%` | `↑ X.X%` |
+> **Note**: Results above are from synthetic GPT-2-like activations. Real GPT-2 activations may show different behavior.
 
 <p align="center">
   <img src="results/phase2/phase2_plots.png" alt="Phase 2 Results" width="800"/>
@@ -469,7 +469,8 @@ loss, loss_dict = sae.compute_loss(x, latents, reconstructed)
 - [x] Toy model validation (Phase 1)
 - [x] SAE with RkCNN initialization
 - [x] Phase 2 experiment framework
-- [ ] Full Phase 2 results on GPT-2
+- [x] Phase 2 results (synthetic data)
+- [ ] Full Phase 2 results on real GPT-2 activations
 - [ ] Multi-layer analysis
 - [ ] Hyperparameter sweep
 - [ ] Feature interpretability analysis
