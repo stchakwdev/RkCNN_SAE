@@ -88,28 +88,46 @@ def run_layer_experiment(
         print(f"Layer {layer}")
         print(f"{'='*60}")
 
+    # Determine activation dimension based on hook point
+    # For GPT-2: d_model=768, d_mlp=3072
+    if args.hook_point == "mlp_out":
+        expected_d_model = 3072  # MLP output dimension
+    else:
+        expected_d_model = 768  # Residual stream dimension
+
     # Get activations
     if args.use_synthetic:
         from rkcnn_sae.data.activation_cache import create_synthetic_gpt2_activations
-        # Use different seed per layer for variety
         activations = create_synthetic_gpt2_activations(
             n_samples=args.max_tokens,
-            d_model=768 if args.hook_point != "mlp_out" else 3072,
+            d_model=expected_d_model,
             seed=args.seed + layer,
         )
         d_model = activations.shape[1]
     else:
-        cache = ActivationCache(
-            model_name=args.model_name,
-            layer=layer,
-            hook_point=args.hook_point,
-            device=args.device,
-        )
-        activations = cache.cache_dataset(
-            max_tokens=args.max_tokens,
-            show_progress=verbose,
-        )
-        d_model = cache.activation_dim
+        try:
+            cache = ActivationCache(
+                model_name=args.model_name,
+                layer=layer,
+                hook_point=args.hook_point,
+                device=args.device,
+            )
+            activations = cache.cache_dataset(
+                max_tokens=args.max_tokens,
+                show_progress=verbose,
+            )
+            d_model = cache.activation_dim
+        except Exception as e:
+            if verbose:
+                print(f"  Warning: Failed to load real data: {e}")
+                print(f"  Falling back to synthetic data...")
+            from rkcnn_sae.data.activation_cache import create_synthetic_gpt2_activations
+            activations = create_synthetic_gpt2_activations(
+                n_samples=args.max_tokens,
+                d_model=expected_d_model,
+                seed=args.seed + layer,
+            )
+            d_model = activations.shape[1]
 
     if verbose:
         print(f"  Activations: {activations.shape}")
