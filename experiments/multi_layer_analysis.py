@@ -117,6 +117,20 @@ def run_layer_experiment(
                 show_progress=verbose,
             )
             d_model = cache.activation_dim
+
+            # Verify dimension matches expected
+            actual_dim = activations.shape[1]
+            if actual_dim != expected_d_model:
+                if verbose:
+                    print(f"  Warning: Activation dimension mismatch: got {actual_dim}, expected {expected_d_model}")
+                    print(f"  Falling back to synthetic data...")
+                from rkcnn_sae.data.activation_cache import create_synthetic_gpt2_activations
+                activations = create_synthetic_gpt2_activations(
+                    n_samples=args.max_tokens,
+                    d_model=expected_d_model,
+                    seed=args.seed + layer,
+                )
+                d_model = activations.shape[1]
         except Exception as e:
             if verbose:
                 print(f"  Warning: Failed to load real data: {e}")

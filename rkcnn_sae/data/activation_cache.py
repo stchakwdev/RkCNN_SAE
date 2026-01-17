@@ -75,12 +75,19 @@ class ActivationCache:
         self.d_mlp = self.model.cfg.d_mlp
 
         # Construct hook name
-        # Common hook points: "blocks.{layer}.hook_mlp_out", "blocks.{layer}.hook_resid_post"
-        if hook_point == "mlp_out":
-            self.hook_name = f"blocks.{layer}.hook_mlp_out"
+        # Common hook points:
+        # - "mlp_post": MLP after GeLU activation (d_mlp = 3072 for GPT-2)
+        # - "mlp_out": MLP output projected back to residual (d_model = 768)
+        # - "resid_post": residual stream after layer (d_model = 768)
+        if hook_point == "mlp_out" or hook_point == "mlp_post":
+            # Use mlp.hook_post for the 3072d intermediate representation
+            self.hook_name = f"blocks.{layer}.mlp.hook_post"
             self.activation_dim = self.d_mlp
         elif hook_point == "resid_post":
             self.hook_name = f"blocks.{layer}.hook_resid_post"
+            self.activation_dim = self.d_model
+        elif hook_point == "resid_mid":
+            self.hook_name = f"blocks.{layer}.hook_resid_mid"
             self.activation_dim = self.d_model
         else:
             self.hook_name = f"blocks.{layer}.{hook_point}"
@@ -134,7 +141,7 @@ class ActivationCache:
 
     def cache_dataset(
         self,
-        dataset_name: str = "openwebtext",
+        dataset_name: str = "wikitext",
         max_tokens: int = 1_000_000,
         seq_len: int = 128,
         batch_size: int = 32,
@@ -177,20 +184,26 @@ class ActivationCache:
         # Load dataset (non-streaming for tokenize_and_concatenate compatibility)
         print(f"Loading dataset: {dataset_name}")
         try:
-            # Try loading a subset directly (non-streaming)
-            dataset = load_dataset(
-                dataset_name,
-                split=f"train[:{min(max_tokens * 2, 100000)}]",  # Load subset
-                trust_remote_code=True,
-            )
+            if dataset_name == "wikitext":
+                # Use wikitext-103-raw-v1 which has more content
+                dataset = load_dataset("wikitext", "wikitext-103-raw-v1", split="train")
+            elif dataset_name == "openwebtext":
+                # Try loading a subset directly (non-streaming)
+                dataset = load_dataset(
+                    dataset_name,
+                    split=f"train[:{min(max_tokens * 2, 100000)}]",  # Load subset
+                )
+            else:
+                dataset = load_dataset(dataset_name, split="train")
         except Exception as e:
             print(f"Warning: Could not load {dataset_name}: {e}")
-            print("Falling back to wikitext...")
+            print("Falling back to wikitext-103...")
             try:
-                dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
-            except Exception:
-                print("Using wikitext-103 raw...")
                 dataset = load_dataset("wikitext", "wikitext-103-raw-v1", split="train")
+            except Exception as e2:
+                print(f"Warning: Could not load wikitext-103: {e2}")
+                print("Using wikitext-2...")
+                dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
 
         # Tokenize
         print("Tokenizing dataset...")
