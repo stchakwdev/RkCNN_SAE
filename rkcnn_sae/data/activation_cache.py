@@ -174,14 +174,23 @@ class ActivationCache:
                 print(f"Loading cached activations from {cache_file}")
                 return torch.load(cache_file)
 
-        # Load dataset
+        # Load dataset (non-streaming for tokenize_and_concatenate compatibility)
         print(f"Loading dataset: {dataset_name}")
         try:
-            dataset = load_dataset(dataset_name, split="train", streaming=True)
-        except Exception:
-            # Fallback to a smaller dataset for testing
-            print("Warning: Could not load openwebtext. Using wikitext for testing.")
-            dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
+            # Try loading a subset directly (non-streaming)
+            dataset = load_dataset(
+                dataset_name,
+                split=f"train[:{min(max_tokens * 2, 100000)}]",  # Load subset
+                trust_remote_code=True,
+            )
+        except Exception as e:
+            print(f"Warning: Could not load {dataset_name}: {e}")
+            print("Falling back to wikitext...")
+            try:
+                dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
+            except Exception:
+                print("Using wikitext-103 raw...")
+                dataset = load_dataset("wikitext", "wikitext-103-raw-v1", split="train")
 
         # Tokenize
         print("Tokenizing dataset...")
@@ -189,6 +198,7 @@ class ActivationCache:
             dataset,
             self.model.tokenizer,
             max_length=seq_len,
+            add_bos_token=True,
         )
 
         # Limit tokens
