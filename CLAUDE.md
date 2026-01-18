@@ -145,7 +145,7 @@ python experiments/multi_layer_analysis.py \
 - [x] Multi-layer analysis on real GPT-2 data (all 12 layers) ✓
 
 ### To Do
-- [ ] Hyperparameter sweep
+- [x] Hyperparameter sweep ✓ (best: 11.9% dead latent reduction)
 - [ ] Feature interpretability analysis
 - [ ] Paper writeup
 
