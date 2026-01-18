@@ -155,11 +155,12 @@ def load_activations(args, verbose: bool = True) -> torch.Tensor:
 
             cache = ActivationCache(
                 model_name="gpt2",
-                hook_point=f"blocks.{args.layer}.mlp.hook_post",
+                layer=args.layer,
+                hook_point="mlp_out",  # Will use mlp.hook_post internally (3072d)
                 device=args.device,
             )
 
-            activations = cache.get_activations(
+            activations = cache.cache_dataset(
                 dataset_name="wikitext",
                 max_tokens=args.max_tokens,
             )
