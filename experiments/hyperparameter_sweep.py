@@ -215,7 +215,10 @@ def run_single_config(
         batch = activations_device[idx]
         baseline_trainer.train_step(batch)
 
-    baseline_metrics = evaluate_sae(baseline_sae, activations_device, args.device)
+    # Forward pass to get latents and reconstructions
+    with torch.no_grad():
+        baseline_latents, baseline_recons, _ = baseline_sae(activations_device)
+    baseline_metrics = evaluate_sae(activations_device, baseline_latents, baseline_recons)
 
     # Train RkCNN SAE
     rkcnn_config = RkCNNSAEConfig(
@@ -235,11 +238,14 @@ def run_single_config(
         batch = activations_device[idx]
         rkcnn_trainer.train_step(batch)
 
-    rkcnn_metrics = evaluate_sae(rkcnn_sae, activations_device, args.device)
+    # Forward pass to get latents and reconstructions
+    with torch.no_grad():
+        rkcnn_latents, rkcnn_recons, _ = rkcnn_sae(activations_device)
+    rkcnn_metrics = evaluate_sae(activations_device, rkcnn_latents, rkcnn_recons)
 
     # Calculate improvement
-    baseline_dead = baseline_metrics['n_dead_latents']
-    rkcnn_dead = rkcnn_metrics['n_dead_latents']
+    baseline_dead = baseline_metrics.n_dead_latents
+    rkcnn_dead = rkcnn_metrics.n_dead_latents
 
     if baseline_dead > 0:
         improvement = (baseline_dead - rkcnn_dead) / baseline_dead * 100
@@ -249,23 +255,23 @@ def run_single_config(
     result = {
         "config": config,
         "baseline": {
-            "dead_latent_rate": baseline_metrics['dead_latent_rate'],
-            "n_dead_latents": baseline_metrics['n_dead_latents'],
-            "l0_sparsity": baseline_metrics['l0_sparsity'],
-            "reconstruction_loss": baseline_metrics['reconstruction_loss'],
-            "explained_variance": baseline_metrics['explained_variance'],
+            "dead_latent_rate": baseline_metrics.dead_latent_rate,
+            "n_dead_latents": baseline_metrics.n_dead_latents,
+            "l0_sparsity": baseline_metrics.l0_sparsity,
+            "reconstruction_loss": baseline_metrics.reconstruction_loss,
+            "explained_variance": baseline_metrics.explained_variance,
         },
         "rkcnn": {
-            "dead_latent_rate": rkcnn_metrics['dead_latent_rate'],
-            "n_dead_latents": rkcnn_metrics['n_dead_latents'],
-            "l0_sparsity": rkcnn_metrics['l0_sparsity'],
-            "reconstruction_loss": rkcnn_metrics['reconstruction_loss'],
-            "explained_variance": rkcnn_metrics['explained_variance'],
+            "dead_latent_rate": rkcnn_metrics.dead_latent_rate,
+            "n_dead_latents": rkcnn_metrics.n_dead_latents,
+            "l0_sparsity": rkcnn_metrics.l0_sparsity,
+            "reconstruction_loss": rkcnn_metrics.reconstruction_loss,
+            "explained_variance": rkcnn_metrics.explained_variance,
         },
         "improvement": {
             "dead_latent_reduction_pct": improvement,
             "dead_latent_diff": baseline_dead - rkcnn_dead,
-            "explained_variance_diff": rkcnn_metrics['explained_variance'] - baseline_metrics['explained_variance'],
+            "explained_variance_diff": rkcnn_metrics.explained_variance - baseline_metrics.explained_variance,
         }
     }
 
