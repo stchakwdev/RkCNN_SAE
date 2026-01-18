@@ -101,16 +101,24 @@ RKCNN_SAE/
 │   │   └── rkcnn_sae.py        # RkCNN-initialized SAE
 │   ├── data/
 │   │   └── activation_cache.py # GPT-2 activation extraction
-│   └── evaluation/
-│       └── metrics.py          # Dead latents, L0, reconstruction
+│   ├── evaluation/
+│   │   └── metrics.py          # Dead latents, L0, reconstruction
+│   └── interpretability/       # NEW: Feature interpretability analysis
+│       ├── activation_store.py # Token-aware activation caching
+│       ├── top_activations.py  # Top-K retrieval per latent
+│       ├── revived_detector.py # Find baseline-dead, rkcnn-alive latents
+│       ├── metrics.py          # Interpretability metrics
+│       └── visualization.py    # Plotting and reporting
 ├── experiments/
 │   ├── phase1_toy_model.py     # Toy model validation
 │   ├── phase2_gpt2.py          # GPT-2 SAE comparison
-│   └── multi_layer_analysis.py # All 12 layers analysis
+│   ├── multi_layer_analysis.py # All 12 layers analysis
+│   └── interpretability_analysis.py # NEW: Interpretability comparison
 └── results/
     ├── phase1/                 # Toy model results
     ├── phase2/                 # GPT-2 results
-    └── multi_layer/            # Multi-layer analysis
+    ├── multi_layer/            # Multi-layer analysis
+    └── interpretability/       # NEW: Interpretability results
 ```
 
 ## Running Experiments
@@ -135,6 +143,20 @@ python experiments/multi_layer_analysis.py \
     --verbose
 ```
 
+### Interpretability Analysis (GPU recommended)
+```bash
+python experiments/interpretability_analysis.py \
+    --layer 6 \
+    --max-tokens 50000 \
+    --device cuda \
+    --output-dir ./results/interpretability
+```
+
+This analyzes:
+- **Revived latents**: Latents that are dead in baseline but alive in RkCNN SAE
+- **Interpretability metrics**: Activation entropy, top-K concentration, token diversity
+- **Top activating tokens**: What each revived latent represents
+
 ## Current Status
 
 ### Completed
@@ -146,7 +168,7 @@ python experiments/multi_layer_analysis.py \
 
 ### To Do
 - [x] Hyperparameter sweep ✓ (best: 11.9% dead latent reduction)
-- [ ] Feature interpretability analysis
+- [x] Feature interpretability analysis ✓ (module: `rkcnn_sae/interpretability/`)
 - [ ] Paper writeup
 
 ## Known Issues

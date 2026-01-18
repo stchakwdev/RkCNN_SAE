@@ -249,6 +249,77 @@ class ActivationCache:
 
         return all_activations
 
+    def cache_dataset_with_tokens(
+        self,
+        dataset_name: str = "wikitext",
+        max_tokens: int = 50000,
+        seq_len: int = 128,
+        batch_size: int = 16,
+        show_progress: bool = True,
+    ):
+        """
+        Cache activations with full token information for interpretability.
+
+        This returns a TokenAwareActivationStore that enables mapping
+        from latent activations back to source tokens.
+
+        Parameters
+        ----------
+        dataset_name : str
+            HuggingFace dataset name.
+        max_tokens : int
+            Maximum number of tokens to process.
+        seq_len : int
+            Sequence length.
+        batch_size : int
+            Batch size for processing.
+        show_progress : bool
+            Show progress bar.
+
+        Returns
+        -------
+        store : TokenAwareActivationStore
+            Token-aware activation store for interpretability analysis.
+        """
+        from datasets import load_dataset
+        from rkcnn_sae.interpretability.activation_store import TokenAwareActivationStore
+
+        # Load dataset
+        print(f"Loading dataset: {dataset_name}")
+        try:
+            if dataset_name == "wikitext":
+                dataset = load_dataset("wikitext", "wikitext-103-raw-v1", split="train")
+            elif dataset_name == "openwebtext":
+                dataset = load_dataset(
+                    dataset_name,
+                    split=f"train[:{min(max_tokens * 2, 100000)}]",
+                )
+            else:
+                dataset = load_dataset(dataset_name, split="train")
+        except Exception as e:
+            print(f"Warning: Could not load {dataset_name}: {e}")
+            print("Falling back to wikitext-103...")
+            try:
+                dataset = load_dataset("wikitext", "wikitext-103-raw-v1", split="train")
+            except Exception as e2:
+                print(f"Warning: Could not load wikitext-103: {e2}")
+                print("Using wikitext-2...")
+                dataset = load_dataset("wikitext", "wikitext-2-raw-v1", split="train")
+
+        # Use TokenAwareActivationStore factory method
+        return TokenAwareActivationStore.from_model_and_dataset(
+            model=self.model,
+            tokenizer=self.model.tokenizer,
+            dataset=dataset,
+            layer=self.layer,
+            hook_point=self.hook_point.replace("mlp_", ""),  # Convert to mlp_post format
+            max_tokens=max_tokens,
+            seq_len=seq_len,
+            batch_size=batch_size,
+            device=self.device,
+            show_progress=show_progress,
+        )
+
 
 class ActivationDataLoader:
     """

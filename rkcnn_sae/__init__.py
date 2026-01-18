@@ -11,8 +11,15 @@ from rkcnn_sae.core.rkcnn_probe import RkCNNProbe
 from rkcnn_sae.core.separation_score import compute_separation_score
 from rkcnn_sae.core.subset_sampler import SubsetSampler
 
+# Import interpretability module (lazy import to avoid dependency issues)
+def get_interpretability():
+    """Get the interpretability submodule."""
+    from rkcnn_sae import interpretability
+    return interpretability
+
 __all__ = [
     "RkCNNProbe",
     "SubsetSampler",
     "compute_separation_score",
+    "get_interpretability",
 ]
