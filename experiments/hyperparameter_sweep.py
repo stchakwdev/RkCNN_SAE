@@ -216,10 +216,14 @@ def run_single_config(
         batch = activations_device[idx]
         baseline_trainer.train_step(batch)
 
-    # Forward pass to get latents and reconstructions
+    # Forward pass to get latents and reconstructions (batched to avoid OOM)
+    eval_batch_size = min(10000, n_samples)  # Use subset for evaluation to avoid OOM
+    eval_idx = torch.randperm(n_samples)[:eval_batch_size]
+    eval_activations = activations_device[eval_idx]
+
     with torch.no_grad():
-        baseline_latents, baseline_recons, _ = baseline_sae(activations_device)
-    baseline_metrics = evaluate_sae(activations_device, baseline_latents, baseline_recons)
+        baseline_latents, baseline_recons, _ = baseline_sae(eval_activations)
+    baseline_metrics = evaluate_sae(eval_activations, baseline_latents, baseline_recons)
 
     # Train RkCNN SAE
     rkcnn_config = RkCNNSAEConfig(
@@ -239,10 +243,10 @@ def run_single_config(
         batch = activations_device[idx]
         rkcnn_trainer.train_step(batch)
 
-    # Forward pass to get latents and reconstructions
+    # Forward pass to get latents and reconstructions (use same eval subset for fair comparison)
     with torch.no_grad():
-        rkcnn_latents, rkcnn_recons, _ = rkcnn_sae(activations_device)
-    rkcnn_metrics = evaluate_sae(activations_device, rkcnn_latents, rkcnn_recons)
+        rkcnn_latents, rkcnn_recons, _ = rkcnn_sae(eval_activations)
+    rkcnn_metrics = evaluate_sae(eval_activations, rkcnn_latents, rkcnn_recons)
 
     # Calculate improvement
     baseline_dead = baseline_metrics.n_dead_latents
