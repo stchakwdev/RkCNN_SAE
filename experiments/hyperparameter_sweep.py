@@ -206,7 +206,7 @@ def run_single_config(
         l1_coefficient=config['l1_coeff'],
     )
     baseline_sae = SparseAutoencoder(baseline_config).to(args.device)
-    baseline_trainer = SAETrainer(baseline_sae, lr=args.lr)
+    baseline_trainer = SAETrainer(baseline_sae, lr=args.lr, device=args.device)
 
     activations_device = activations.to(args.device)
     n_samples = activations.shape[0]
@@ -232,7 +232,7 @@ def run_single_config(
     )
     rkcnn_sae = RkCNNSparseAutoencoder(rkcnn_config).to(args.device)
     rkcnn_sae.initialize_with_rkcnn(activations_device, device=args.device)
-    rkcnn_trainer = SAETrainer(rkcnn_sae, lr=args.lr)
+    rkcnn_trainer = SAETrainer(rkcnn_sae, lr=args.lr, device=args.device)
 
     for step in range(args.n_train_steps):
         idx = torch.randint(0, n_samples, (args.batch_size,))
