@@ -61,6 +61,13 @@ if actual_dim != expected_d_model:
 
 ### 4. RunPod Setup
 
+**IMPORTANT: Always run GPU experiments on RunPod, not locally.**
+
+Preferred GPU types (in order):
+1. NVIDIA GeForce RTX 4090
+2. NVIDIA RTX A6000
+3. NVIDIA GeForce RTX 3090
+
 **Required PyTorch version for transformer-lens:**
 ```bash
 pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu124
@@ -68,6 +75,15 @@ pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorc
 
 **Full dependency install:**
 ```bash
+pip install transformer-lens scikit-learn matplotlib tqdm datasets einops
+```
+
+**Quick setup script for RunPod:**
+```bash
+cd /workspace && \
+git clone https://github.com/yourusername/RKCNN_SAE.git && \
+cd RKCNN_SAE && \
+pip install -e . && \
 pip install transformer-lens scikit-learn matplotlib tqdm datasets einops
 ```
 

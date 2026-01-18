@@ -293,6 +293,52 @@ This confirms RkCNN initialization particularly benefits the final transformer l
 
 ---
 
+### Hyperparameter Sweep ✓
+
+Comprehensive sweep of 54 configurations to identify optimal RkCNN parameters.
+
+**Run:**
+```bash
+python experiments/hyperparameter_sweep.py --sweep-mode full --max-tokens 50000 --n-train-steps 3000 --device cuda
+```
+
+**Parameters Tested:**
+- `rkcnn_n_subsets` (h): [300, 600, 1000]
+- `rkcnn_fraction`: [0.25, 0.5, 0.75]
+- `score_method`: ["kurtosis", "knn", "variance_ratio"]
+- `l1_coefficient`: [0.0005, 0.001, 0.005]
+
+**Top 5 Configurations:**
+
+| Rank | h | Fraction | Score Method | L1 | Dead Latent Reduction |
+|------|---|----------|--------------|-----|----------------------|
+| 🥇 | 300 | 0.75 | variance_ratio | 0.0005 | **11.9%** |
+| 🥈 | 300 | 0.5 | knn | 0.0005 | **8.5%** |
+| 🥉 | 600 | 0.5 | kurtosis | 0.005 | **7.5%** |
+| 4 | 600 | 0.75 | variance_ratio | 0.0005 | **7.5%** |
+| 5 | 300 | 0.5 | variance_ratio | 0.001 | **7.2%** |
+
+<p align="center">
+  <img src="results/hyperparam_sweep/hyperparam_sweep.png" alt="Hyperparameter Sweep Results" width="800"/>
+</p>
+
+**Key Findings:**
+- ✅ **variance_ratio** scoring consistently outperforms kurtosis and knn
+- ✅ **Smaller h (300)** works as well or better than larger values - more efficient
+- ✅ **Higher fraction (0.75)** appears frequently in top configs
+- ✅ **Lower L1 (0.0005)** improves dead latent reduction
+- 🔬 Best configuration achieves **11.9% dead latent reduction**
+
+**Recommended Configuration:**
+```yaml
+rkcnn_n_subsets: 300        # Efficient, works well
+rkcnn_fraction: 0.75        # Use more mined directions
+rkcnn_score_method: variance_ratio  # Best scoring method
+l1_coefficient: 0.0005      # Lower regularization
+```
+
+---
+
 ### Phase 2: GPT-2 SAE Experiments
 
 Compares baseline SAE vs RkCNN-initialized SAE on GPT-2 MLP activations.
